@@ -1,54 +1,62 @@
-const fs = require('fs');
-const fetch = require('node-fetch');
+const md = require('./md-method')
+//const path = require('path');
+//import { existPath, convertPathToAbsolut } from './md-method.js'
 
-/*function mdLinks(path, options) {
-  if (options == true) {
-    const datos = getData(path);
-    console.log(typeof datos);
-    // const urlRevision = validate(datos);
-    // console.log("esta: " + urlRevision);
-    return datos;
-  };
-}
 
-const getData = (path) => {
-  const promiseData = fs.readFile(path, 'utf8', (error, datos) => {
-    if (error) throw error;
-    console.log('valor: ' + datos);
-  });
-  return promiseData;
-}
+let rutacompleta ='C:\proyecto 4\LIM018-md-links'
+let firname = "\rubis\videos";
 
-const validate = (url) => {
-  let responseValidate = '';
-  const datosValidate = fetch(url).then(Response => {
-    console.log('El status de ese link es: ' + Response.status);
-    console.log('Esta activo: ' + Response.ok);
-    return responseValidate = `${Response.status}` + ' ' + `${Response.ok}`;
-  });
-  return datosValidate;
-}
 
-// archivoPrueba = "prueba.md";
 
-// fs.readFile(archivoPrueba, 'utf8', (error, datos) => {
-//   if (error) throw error;
-//   console.log("El contenido es: ", datos);
-// });
 
-mdLinks('D:\\Laboratoria\\Cuarto proyecto\\LIM018-md-links\\prueba2.md', true);
-validate('https://github.com/');
-//const dato1 = mdLinks('D:\\Laboratoria\\Cuarto proyecto\\LIM018-md-links\\prueba2.md', true);
-//const dato2 = validate('https://github.com/');
-// const datos1 = getData('D:\\Laboratoria\\Cuarto proyecto\\LIM018-md-links\\prueba2.md');
-// setTimeout(function () {
-//   console.log(datos1);
-// }, 2000);
-module.exports = () => {
-  // ...
-};
 
+console.log(path.isAbsolute(__dirname))
+console.log(__dirname)
+
+//console.log(path.extname(rutacompleta))
+
+//console.log(md.getMdFiles(rutacompleta));
+
+// LEER EL ARCHIVO MARKDOWN
+//const readFile = (file) => fs.readFileSync(file, 'UTF-8');
+//const fileContent = (pathAbsolute) => readFile(pathAbsolute);
+
+
+
+
+//console.log(path.isAbsolute('C:\proyecto 4\LIM018-md-links')); false
+//console.log(method.convertPathToAbsolut('C:\proyecto 4\LIM018-md-links\isPath'));  es absoluta C:proyecto 4LIM018-md-linksisPath
+//console.log(md.existPath('/proyecto 4/LIM018-md-links'))
+//console.log(method.existPath('C:\proyecto 4\LIM018-md-links')) la ruta no existe undefined
+//console.log(path.isAbsolute('C:/proyecto 4/LIM018-md-links'))   
+//console.log(path.isAbsolute('C:\proyecto 4\LIM018-md-links'))  false
+//console.log(__dirname)
+
+//console.log(path.normalize('C:\proyecto 4\LIM018-md-links'))  C:proyecto 4LIM018-md-links
+//console.log(path.isAbsolute('C:proyecto 4LIM018-md-links'))  false
+//console.log(path.join('C:\proyecto 4\LIM018-md-links'))
+//console.log(path.normalize('C:proyecto 4LIM018-md-links'))
+
+
+
+
+
+/*const mdLinks = (path, options = { validate: false }) => new Promise((resolve, reject) => {
+  // invoca funcion converterPath
+  const absolutePath = converterPath(path);
+
+  // invoca funcion mdsArraysValidation con el resultado de pathValidation CALLBACK
+  mdsArraysValidation(options, pathValidation(absolutePath))
+    .then((result) => {
+      resolve(result);
+    })
+    .catch((error) => {
+      reject(error);
+    });
+});
 */
+// se exporta funcion mdLinks
+//module.exports = mdLinks;
 
 
 
@@ -59,6 +67,6 @@ module.exports = () => {
 
 
 
-module.exports = () => {
-  // ...
-};
+
+
+

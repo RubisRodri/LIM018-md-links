@@ -1,12 +1,13 @@
 const fs = require("fs");
 const path = require("path");
-const { extname } = require("path");
+const fetch = require ("node-fetch")
+
 
 //funcion para convertir una ruta de relativa a absoluta.
 
 const convertPathToAbsolut = (isPath) => {
   if (path.isAbsolute(isPath)) {
-    console.log(" es absoluta");
+    //console.log(" es absoluta");
     return isPath;
   } else {
     console.log("La ruta no es absoluta");
@@ -38,12 +39,29 @@ const isDirectory = (isPath) => {
 };
 
 
-// funcion para leer archivo
-const readDoc = (isPath) => fs.readFileSync(isPath, "UTF-8");
+// funcion para leer archivo de forma sincrona
+const readDoc = (isPath) => fs.readFileSync(isPath, "UTF-8");// documentos
+const readFile = (isPath) => fs.readdirSync(isPath, 'UTF-8');// archivos
 
-// LEER EL ARCHIVO MARKDOWN
-//const readFile = (file) => fs.readFileSync(file, 'UTF-8');
-//const fileContent = (pathAbsolute) => readFile(pathAbsolute);
+//---Obtener Array de rutas .md---//
+const getMdFiles = (allMdFiles, isPath) => {
+  const isDirRes = fs.statSync(isPath).isDirectory(); //Verifica si la ruta es directorio (true or False)
+  if (isDirRes) { //Si es Directorio
+      const allDirFiles = fs.readdirSync(isPath); //busca las carpertas dentro del directorio
+      allDirFiles.forEach((file) => {
+          const absolutPath = path.join(isPath, file);
+          getMdFiles(allMdFiles, absolutPath)
+      })
+  } else {
+      const isMdFiles = path.extname(isPath); //Extencion del archivo
+      if (isMdFiles === '.md') { //Si es archivo .md
+          allMdFiles.push(isPath);
+      }
+  }
+  return allMdFiles;  //Retorna array de Path .md
+};
+
+
 
 // EXTRAER LOS LINKS DEL ARCHIVO MARKDOWN
 
@@ -52,10 +70,12 @@ const readLinks = (content, isPath) => new Promise ((resolve) => {
   const regExp2 = new RegExp (/\[[\w\s\d.()]+\]/);//texto
   const regExp3 = new RegExp (/\(((?:\/|https?:\/\/)[\w\d./?=#&_%~,.:-]+)\)/mg);//ruta
   const fileContent = content;//lee el archivo
+  //console.log(fileContent)
   const links = fileContent.match(regExp1);/* extraigo los links que coincidan con mi expresion regular
       match() se usa para obtener todas las ocurrencias de una expresión regular dentro de una cadena.*/
       //console.log(links)
   //console.log('arrayLinks: ', arrayLinks);
+  //console.log(links)
   let arrayLinks;
   if (links) {
       arrayLinks = links.map((myLinks) => {
@@ -77,6 +97,70 @@ const readLinks = (content, isPath) => new Promise ((resolve) => {
       console.log('el archivo no contiene links')
   }
 });
+
+//-----Leer contenido de un archivo------//
+const readFileContent = (arrayMds) => new Promise((resolve, reject) => {
+    const mdArray = [];
+    arrayMds.forEach((element) => {
+        fs.readFile(element, 'utf8', function (err, data) {
+            if (err) {
+                const errorMessage = '| ✧ Empty File ✧  |';
+                console.log(errorMessage);
+            } else {
+                readLinks(data, element)
+                    .then((resArray) => {
+                        mdArray.push(resArray)
+                        //console.log(mdArray);
+                        if (mdArray.length === arrayMds.length) {
+                            resolve(mdArray.flat());
+                        }
+                    })
+                }
+        });
+    })
+});
+
+
+
+// Peticion con Fetch
+const httpPetition = (arrObjLinks) => {
+  // console.log('Desde node', arrObjLinks);
+  const arrPromise = arrObjLinks.map((obj) => fetch(obj.href)
+      .then((res) => ({
+          href: obj.href,
+          text: obj.text,
+          file: obj.fileName,
+          status: res.status,
+          ok: res.ok ? 'OK' : 'FAIL',
+      }))
+      .catch(() => ({
+          href: obj.href,
+          text: obj.text,
+          file: obj.fileName,
+          status: 404,
+          ok: 'FAIL',
+      })));
+  return Promise.all(arrPromise);
+};
+
+
+
+
+module.exports = {
+  convertPathToAbsolut,
+  existPath,
+  extPath,
+  readLinks,
+  isDirectory,
+  getMdFiles,
+  readFileContent,
+  readDoc,
+  readFile,
+  httpPetition,
+};
+
+
+
 
     /*if (readDoc !== null) {
       const linksArray = readDoc.match(regxLink); // revisa content archivo para capturar links
@@ -103,12 +187,3 @@ const readLinks = (content, isPath) => new Promise ((resolve) => {
   */
 
 //const fileContent = (pathAbsolute) => readFile(pathAbsolute);
-
-module.exports = {
-  convertPathToAbsolut,
-  existPath,
-  extPath,
-  readLinks,
-  readDoc,
-  isDirectory
-};

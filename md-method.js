@@ -161,29 +161,3 @@ module.exports = {
 
 
 
-
-    /*if (readDoc !== null) {
-      const linksArray = readDoc.match(regxLink); // revisa content archivo para capturar links
-    }
-    if (linksArray === null) {
-      // si no hay links en archivo retorna []
-      resolve([]);
-    }
-
-    const turnedLinksArray = linksArray.map((myLinks) => {
-      // transforma arr links y entrega objt
-      const myhref = myLinks.match(regxUrl).join().slice(1, -1); // URL encontradas
-      const mytext = myLinks.match(regxText).join().slice(1, -1); // texto que hace ref a URL
-      return {
-        href: myhref,
-        text: mytext.substring(0, 50),
-        fileName: path.basename(pathMd), // ruta de URL
-      };
-      resolve(turnedLinksArray);
-    });
-      reject(error);
-     console.log(error)
-  });
-  */
-
-//const fileContent = (pathAbsolute) => readFile(pathAbsolute);

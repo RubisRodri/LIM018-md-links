@@ -20,6 +20,7 @@ const totalLink = (arraylinks) => {
 };
 
 //module.exports = linkStats;
-module.exports = totalLink;
+//module.exports = totalLink;
 
-//module.exports = { linkStats, totalLink, }**no se exporta bien
+module.exports = { linkStats, totalLink }
+//tengo problemas con los resultados

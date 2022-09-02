@@ -18,7 +18,7 @@ const ejemplo2 = "C:/proyecto 4/LIM018-md-links/prueba2.md"; // este funciona co
 const documents = "document";
 
 
-const mdLinks = (ispath, option = { validate: false }) =>
+const mdLinks = ( ispath, option = { validate: false }) =>
   new Promise((resolve, reject) => {
     const absolutePath = convertPathToAbsolut(ispath);
     const validePath = existPath(absolutePath);
@@ -27,8 +27,7 @@ const mdLinks = (ispath, option = { validate: false }) =>
 
     const arrayMdFile = [];
     if (validePath === false) {
-      console.log("ruta no existe");
-      reject("| INVALID PATH |");
+      reject("ruta no existe");
     }
     if (validePath) {
       const filesMd = getMdFiles(arrayMdFile, absolutePath); //---Funcion recursiva que revisa el directorio--//
@@ -59,11 +58,11 @@ const mdLinks = (ispath, option = { validate: false }) =>
 
 
 //mdLinks(documents);
-/*mdLinks( ejemplo2, { validate: true }).then((resolve) => {
+mdLinks( ejemplo, { validate: true }).then((resolve) => {
   
-  //console.log(resolve)
+  console.log(resolve)
   //console.log(linkStats(resolve))
-  console.log(totalLink(resolve))
+  //console.log(totalLink(resolve))
 });
-*/
+
 module.exports = mdLinks;

@@ -2,8 +2,8 @@
 const mdLinks = require("./index");
 const process = require("process");
 const arguments = process.argv.slice(2);
-const linkStats = require("./stats");
-const totalLink = require("./stats");
+const linkStats = require("./stats").linkStats;
+const totalLink = require("./stats").totalLink;
 const path = require("path");
 //console.log(process);
 //console.log(arguments);
@@ -15,8 +15,10 @@ switch (arguments.length) {
 
   case 1:
     mdLinks(arguments[0], { validate: false })
-      .then((resultado) => {
-        console.log(resultado);
+      .then((objectLinks) => {
+        objectLinks.forEach((link) => {
+          console.log(link.fileName, link.href, link.text);
+        });
       })
       .catch((error) => {
         console.log("ha ocurrido un error");
@@ -43,26 +45,17 @@ switch (arguments.length) {
     if (
       (arguments[1] === "--validate" && arguments[2] === "--stats") ||
       (arguments[1] === "--stats" && arguments[2] === "--validate")
-    ) {
-      mdLinks(arguments[0], { validate: true }).then((resolve) => {
+    ){
+      mdLinks(arguments[0], { validate: true })
+      .then((resolve) => {
         console.log(totalLink(resolve));
         //console.log(resolve)
+      })
+      .catch((err) =>{
+        console.log('ha ocurrido un error')
       });
-    } else {
-      console.log("ha ocurrido un error");
-    }
-    break;
+    
+ };
 
+};
 
-}
-
-//console.log(linkStats)
-/*
-mdLinks(path).then((objectLinks)=>{
-    //console.log(objectLinks)
-    objectLinks.forEach(link=> {
-    console.log(link.fileName, link.href, link.text)  
-    });
-})
-
-*/

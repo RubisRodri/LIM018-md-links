@@ -1,32 +1,29 @@
 const {
   convertPathToAbsolut,
   existPath,
-  extPath,
-  readDoc,
-  readFile,
   getMdFiles,
-  isDirectory,
   readFileContent,
-  readLinks,
   httpPetition,
 } = require("./md-method");
 const fetch = require("node-fetch");
 const linkStats = require('./stats');
+const totalLink  = require('./stats');
 
-//const fs = require("fs");
+
 
 const ejemplo4 = "prueba";
 const ejemplo = "C:/proyecto 4/LIM018-md-links/prueba"; // funciona como ejemplo de directorio
-const ruta = "readme2.md";
+const ruta = "readme2.md"; // no contiene link
 const ejemplo2 = "C:/proyecto 4/LIM018-md-links/prueba2.md"; // este funciona como ejemplo para archivo
-//console.log(__dirname)
+const documents = "document";
 
 
 const mdLinks = (ispath, option = { validate: false }) =>
   new Promise((resolve, reject) => {
     const absolutePath = convertPathToAbsolut(ispath);
     const validePath = existPath(absolutePath);
-    //console.log(validePath)
+    console.log(absolutePath)
+    
 
     const arrayMdFile = [];
     if (validePath === false) {
@@ -38,7 +35,7 @@ const mdLinks = (ispath, option = { validate: false }) =>
       //console.log(filesMd);
       if (filesMd.length === 0) {
         //---Si el directorio es vacio---//
-        reject("| ✿ EMPTY DIRECTORY ✿ |");
+        reject("| EMPTY DIRECTORY |");
         //console.log("directorio vacio");
       } else {
         readFileContent(arrayMdFile).then((objectLinks) => {
@@ -49,7 +46,7 @@ const mdLinks = (ispath, option = { validate: false }) =>
           } else {
             if (option.validate === true) {
               httpPetition(objectLinks).then((response) => {
-                resolve(response);
+              resolve(response);
               });
             } else {
               resolve(objectLinks);
@@ -61,9 +58,12 @@ const mdLinks = (ispath, option = { validate: false }) =>
   });
 
 
-//mdLinks(ejemplo2);
-//mdLinks(ejemplo, { validate: false }).then((resolve) => {
+//mdLinks(documents);
+/*mdLinks( ejemplo2, { validate: true }).then((resolve) => {
+  
+  //console.log(resolve)
   //console.log(linkStats(resolve))
-//});
-
+  console.log(totalLink(resolve))
+});
+*/
 module.exports = mdLinks;

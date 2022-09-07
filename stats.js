@@ -1,11 +1,12 @@
 
-const linkStats = (arraylinks) => { // --STATS
+
+const linkStats = (arraylinks) => { 
     const totalArray = arraylinks.map(link => link.href);
     const uniqueLinks = [...new Set(totalArray)];
-    return [{
-        total: totalArray.length,
-        uniqueLinks: uniqueLinks.length,
-    }]
+    return {
+        Total: totalArray.length,
+        UniqueLinks: uniqueLinks.length,
+    }
 };
 
 const totalLink = (arraylinks) => {
@@ -19,8 +20,13 @@ const totalLink = (arraylinks) => {
     }
 };
 
-//module.exports = linkStats;
-//module.exports = totalLink;
 
-module.exports = { linkStats, totalLink }
-//tengo problemas con los resultados
+
+ 
+
+
+
+
+
+
+module.exports = { linkStats, totalLink };

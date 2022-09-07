@@ -20,9 +20,6 @@ const existPath = (isPath) => fs.existsSync(isPath);
 
 
 
-
-
-
 // funcion para leer archivo de forma sincrona
 //const readDoc = (isPath) => fs.readFileSync(isPath, "UTF-8"); // documentos
 const readFile = (isPath) => fs.readdirSync(isPath, "UTF-8"); // archivos

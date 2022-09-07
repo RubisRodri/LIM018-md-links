@@ -7,7 +7,7 @@ const {
 } = require("./md-method");
 const fetch = require("node-fetch");
 const linkStats = require('./stats');
-const totalLink  = require('./stats');
+//const totalLink  = require('./stats');
 
 
 
@@ -38,7 +38,7 @@ const mdLinks = ( ispath, option = { validate: false }) =>
         //console.log("directorio vacio");
       } else {
         readFileContent(arrayMdFile).then((objectLinks) => {
-          //console.log(objectLinks)
+         // console.log(objectLinks)
           if (objectLinks.length === 0) {
             //---Si el documento no tiene links---//
             reject("|  EMPTY FILE |");
@@ -57,12 +57,13 @@ const mdLinks = ( ispath, option = { validate: false }) =>
   });
 
 
-//mdLinks(documents);
-mdLinks( ejemplo, { validate: true }).then((resolve) => {
+
+
+ /*mdLinks( ejemplo, { validate: false }).then((resolve) => {
   
-  console.log(resolve)
+  //console.log(resolve)
   //console.log(linkStats(resolve))
   //console.log(totalLink(resolve))
 });
-
+*/
 module.exports = mdLinks;

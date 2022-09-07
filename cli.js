@@ -10,33 +10,39 @@ const path = require("path");
 
 switch (arguments.length) {
   case 0:
-    console.log("por favor ingresa una ruta");
+    console.log("Por favor ingresa una ruta");
     break;
 
   case 1:
-    mdLinks(arguments[0], { validate: false })
+    mdLinks(arguments[0], { validate : false })
       .then((objectLinks) => {
         objectLinks.forEach((link) => {
           console.log(link.fileName, link.href, link.text);
         });
       })
       .catch((error) => {
-        console.log("ha ocurrido un error");
+        console.log("ha ocurrido un error, deje un espacio despues de la ruta y coloque la linea de comando");
       });
     break;
 
   case 2:
     if (arguments[1] === "--validate") {
       mdLinks(arguments[0], { validate: true })
-        .then((resolve) => {
-          console.log(resolve);
+        .then((objectLinks) => {
+            objectLinks.forEach((link) =>{
+              console.log(link.href, link.ok, link.status, link.text )
+            })
         })
         .catch((error) => {
           console.log("ha ocurrido un error");
         });
     } else if (arguments[1] === "--stats") {
-      mdLinks(arguments[0], { validate: true }).then((resolve) => {
-        console.log(linkStats(resolve));
+      mdLinks(arguments[0], { validate: true })
+            .then((resolve) => {
+            const estadistica = linkStats(resolve);
+            console.log(`Total : ${estadistica.Total}`);
+            console.log(`UniqueLinks : ${estadistica.UniqueLinks}`)
+            
       });
     }
     break;
@@ -48,14 +54,14 @@ switch (arguments.length) {
     ){
       mdLinks(arguments[0], { validate: true })
       .then((resolve) => {
-        console.log(totalLink(resolve));
-        //console.log(resolve)
+        const statusLinks= totalLink(resolve);
+         console.log(`Total : ${statusLinks.Total}`);
+         console.log(`Unique : ${statusLinks.Unique}`);
+         console.log(`Broken : ${statusLinks.Broken}`);
       })
       .catch((err) =>{
         console.log('ha ocurrido un error')
-      });
-    
- };
-
+      });  
+    };
 };
 

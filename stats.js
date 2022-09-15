@@ -1,6 +1,5 @@
 
-
-const linkStats = (arraylinks) => { 
+const linkStats = (arraylinks) => {
     const totalArray = arraylinks.map(link => link.href);
     const uniqueLinks = [...new Set(totalArray)];
     return {
@@ -19,12 +18,6 @@ const totalLink = (arraylinks) => {
         Broken : brokenLinks.length,
     }
 };
-
-
-
- 
-
-
 
 
 

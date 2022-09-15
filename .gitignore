@@ -3,3 +3,9 @@
 .nyc_output/
 coverage/
 node_modules/
+document
+documentnot
+prueba2.md
+test
+__mocks__
+.vscode

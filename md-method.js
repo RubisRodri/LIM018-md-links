@@ -6,10 +6,8 @@ const fetch = require("node-fetch");
 
 const convertPathToAbsolut = (isPath) => {
   if (path.isAbsolute(isPath)) {
-    //console.log(" es absoluta");
     return isPath;
   } else {
-    console.log("La ruta no es absoluta");
     return path.resolve(isPath).normalize();
   }
 };
@@ -21,8 +19,9 @@ const existPath = (isPath) => fs.existsSync(isPath);
 
 
 // funcion para leer archivo de forma sincrona
-//const readDoc = (isPath) => fs.readFileSync(isPath, "UTF-8"); // documentos
-const readFile = (isPath) => fs.readdirSync(isPath, "UTF-8"); // archivos
+const readFile = (isPath) => fs.readdirSync(isPath, "UTF-8"); // directorios
+
+
 
 //---Obtener Array de rutas .md---//
 const getMdFiles = (allMdFiles, isPath) => {
@@ -49,6 +48,7 @@ const getMdFiles = (allMdFiles, isPath) => {
 
 const readLinks = (content, isPath) =>
   new Promise((resolve) => {
+    //console.log(content)
     const regExp1 = new RegExp(/\[(.*?)\]\(.*?\)/gm); //link
     const regExp2 = new RegExp(/\[[\w\s\d.()]+\]/); //texto
     const regExp3 = new RegExp(
@@ -57,11 +57,8 @@ const readLinks = (content, isPath) =>
     const fileContent = content; //lee el archivo
     //console.log(fileContent)
     const links =
-      fileContent.match(
-        regExp1
-      ); /* extraigo los links que coincidan con mi expresion regular
-      match() se usa para obtener todas las ocurrencias de una expresión regular dentro de una cadena.*/
-  
+      fileContent.match(regExp1); //extraigo los links que coincidan con mi expresion regular
+      //console.log(links)
     let arrayLinks;
     if (links) {
       arrayLinks = links.map((myLinks) => {
@@ -70,6 +67,7 @@ const readLinks = (content, isPath) =>
 
         const mytextArray = myLinks.match(regExp2) ?? [];
         const mytext = mytextArray.join().slice(1, -1); //Texto []
+      
         return {
           href: myhref,
           text: mytext,
@@ -77,6 +75,7 @@ const readLinks = (content, isPath) =>
         };
       });
       resolve(arrayLinks);
+      //console.log(arrayLinks)
     } else if (links === null) {
       resolve([]);
       console.log("el archivo no contiene links");
@@ -85,18 +84,19 @@ const readLinks = (content, isPath) =>
 
 //-----Leer contenido de un archivo------//
 const readFileContent = (arrayMds) =>
-  new Promise((resolve, reject) => {
+  new Promise((resolve) => {
+   //console.log('cmz', arrayMds)
     const mdArray = [];
     arrayMds.forEach((element) => {
       fs.readFile(element, "utf8", function (err, data) {
         if (err) {
-          const errorMessage = "| ✧ Empty File ✧  |";
+          const errorMessage = "|  Empty File  |";
           console.log(errorMessage);
         } else {
           readLinks(data, element).then((resArray) => {
             mdArray.push(resArray);
-            //console.log(mdArray);
             if (mdArray.length === arrayMds.length) {
+              //console.log('termina', mdArray.flat())
               resolve(mdArray.flat());
             }
           });
@@ -107,7 +107,7 @@ const readFileContent = (arrayMds) =>
 
 // Peticion con Fetch
 const httpPetition = (arrObjLinks) => {
-  // console.log('Desde node', arrObjLinks);
+  //console.log('Desde node', arrObjLinks);
   const arrPromise = arrObjLinks.map((obj) =>
     fetch(obj)
       .then((res) => ({
@@ -115,7 +115,7 @@ const httpPetition = (arrObjLinks) => {
         text: obj.text,
         file: obj.fileName,
         status: res.status,
-        ok: res.ok ? "OK" : "FAIL",
+        ok: res.ok ? "OK" : "FAIL"
       }))
       .catch(() => ({
         href: obj.href,
@@ -135,7 +135,7 @@ module.exports = {
   getMdFiles,
   readFileContent,
   readFile,
-  httpPetition,
+  httpPetition
 };
 
 

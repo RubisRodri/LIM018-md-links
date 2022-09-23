@@ -11,6 +11,7 @@ const fs = require("fs");
 const readFile = require("../md-method").readFile;
 const fetch = require("node-fetch");
 const { resolve } = require("path");
+//const testInvalid = require("./pruebaTest");
 
 jest.mock("node-fetch");
 
@@ -200,3 +201,73 @@ it("Al haber un error en la peticion http se mostrará un error", () => {
     expect(res[0]).toEqual(expect.objectContaining({status: 404, ok: 'FAIL'}));
   });
 });
+
+describe('md-Links', () => {
+  it('es una funcion', () => {
+    expect(typeof mdLinks).toBe('function')
+  })
+});
+
+it('Debe retornar una promesa', () => {
+  const path = "C:/proyecto 4/LIM018-md-links/prueba2.md";
+  expect(mdLinks(path)instanceof Promise).toBeTruthy()
+});
+
+it('Deberia retornar un arreglo de objetos validados', () => {
+  const path = "C:/proyecto 4/LIM018-md-links/prueba2.md";
+  const arrayLinkTest = [
+    {
+      href: 'https://es.wiki123.org/wiki/Markdown',
+      text: 'Markdown',
+      fileName: 'C:/proyecto 4/LIM018-md-links/prueba2.md'
+    },
+    {
+      href: 'https://nodejs.org/',
+      text: 'Node.js',
+      fileName: 'C:/proyecto 4/LIM018-md-links/prueba2.md'
+    }
+  ]
+  return (mdLinks(path, {validate : false })).then((e) =>{
+    expect(e).toMatch(arrayLinkTest)
+  })
+  .catch((error) => {
+    return error
+  });
+});
+
+it('Deberia retornar un arreglo con validate peticion http', () => {
+  const path = "C:/proyecto 4/LIM018-md-links/prueba2.md";
+  const arrayHtpp = [
+    {
+      href: 'https://es.wiki123.org/wiki/Markdown',
+      text: 'Markdown',
+      file: 'C:/proyecto 4/LIM018-md-links/prueba2.md',
+      status: 404,
+      ok: 'FAIL'
+    },
+    {
+      href: 'https://nodejs.org/',
+      text: 'Node.js',
+      file: 'C:/proyecto 4/LIM018-md-links/prueba2.md',
+      status: 200,
+      ok: 'OK'
+    }
+  ];
+  return(mdLinks(path, { validate : true }).then((res) => {
+    expect(e).toMatch(arrayHtpp)
+  })).catch((error) => {
+    return error
+  })
+});
+
+
+// it('debe ser un array de objetos con peticion HTTP', () => mdLinks(path2, { validate: true })
+// .then((data) => {
+//     expect(data[0].value.statusText).toBe('ok');
+// }));
+// it('It should return an error message', () => {
+// return mdLinks(testInvalid, { validate: true }).catch(e => expect(e).toMatch('| ✿ INVALID PATH ✿ |'))
+// })
+
+
+  

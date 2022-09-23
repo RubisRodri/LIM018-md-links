@@ -75,7 +75,6 @@ const readLinks = (content, isPath) =>
         };
       });
       resolve(arrayLinks);
-      //console.log(arrayLinks)
     } else if (links === null) {
       resolve([]);
       console.log("el archivo no contiene links");
@@ -85,7 +84,6 @@ const readLinks = (content, isPath) =>
 //-----Leer contenido de un archivo------//
 const readFileContent = (arrayMds) =>
   new Promise((resolve) => {
-   //console.log('cmz', arrayMds)
     const mdArray = [];
     arrayMds.forEach((element) => {
       fs.readFile(element, "utf8", function (err, data) {
@@ -96,7 +94,6 @@ const readFileContent = (arrayMds) =>
           readLinks(data, element).then((resArray) => {
             mdArray.push(resArray);
             if (mdArray.length === arrayMds.length) {
-              //console.log('termina', mdArray.flat())
               resolve(mdArray.flat());
             }
           });
@@ -107,7 +104,6 @@ const readFileContent = (arrayMds) =>
 
 // Peticion con Fetch
 const httpPetition = (arrObjLinks) => {
-  //console.log('Desde node', arrObjLinks);
   const arrPromise = arrObjLinks.map((obj) =>
     fetch(obj)
       .then((res) => ({

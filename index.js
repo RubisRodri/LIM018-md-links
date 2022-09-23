@@ -20,9 +20,6 @@ const mdLinks = ( ispath, option = { validate: false }) =>
   new Promise((resolve, reject) => {
     const absolutePath = convertPathToAbsolut(ispath);
     const validePath = existPath(absolutePath);
-  
-    
-
     const arrayMdFile = [];
     if (validePath === false) {
       reject("ruta no existe");
@@ -52,12 +49,6 @@ const mdLinks = ( ispath, option = { validate: false }) =>
 
 
 
- //mdLinks( ejemplo6, { validate: true }).then((resolve) => {
-  
-  
-  //console.log(resolve)
-  //console.log(linkStats(resolve))
-  //console.log(totalLink(resolve))
-//});
+
 
 module.exports = mdLinks;
